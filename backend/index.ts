@@ -1,9 +1,10 @@
 import express from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
+import "reflect-metadata";
 
 
-const app = express();
+const index = express();
 const PORT = process.env.PORT || 4001;
 
 const corsOptions = {
@@ -11,21 +12,21 @@ const corsOptions = {
     optionsSuccessStatus: 200,
 };
 
-app.use(cors(corsOptions));
+index.use(cors(corsOptions));
 
-app.use(bodyParser.json());
+index.use(bodyParser.json());
 
-app.post("/register", async (req, res) => {
+index.post("/register", async (req, res) => {
     const {username, password} = req.body;
-
+/*
     const createUser = await prisma.user.create({
         data: { username, password }
-    })
+    }) */
 
     res.send('L\'utilisateur a bien été créer !');
 })
 
 
-app.listen(PORT, () => {
+index.listen(PORT, () => {
     console.log(`Server is listening on port ${PORT}`)
 })

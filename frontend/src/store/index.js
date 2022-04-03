@@ -14,7 +14,7 @@ const store = createStore({
             return state.userInfos
         },
         isAuthenticated(state) {
-            return state.connectedUser
+            return state.isAuthenticated
         }
     },
     mutations: {

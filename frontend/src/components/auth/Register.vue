@@ -6,11 +6,7 @@
     </p>
 
     <div class="group">
-      <div style="display: flex; column-gap: 1rem">
-        <InputText type="text" class="p-inputtext-lg" v-model="firstName" placeholder="Prénom"/>
-        <InputText type="text" class="p-inputtext-lg" v-model="lastName" placeholder="Nom"/>
-      </div>
-      <InputText type="email" class="p-inputtext-lg" v-model="email" placeholder="Adresse email"/>
+      <InputText type="text" class="p-inputtext-lg" v-model="username" placeholder="Username"/>
       <div>
         <Password v-model="password" toggleMask placeholder="Mot de passe" class="p-inputtext-lg"/>
       </div>
@@ -24,7 +20,6 @@
 import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
 import Password from 'primevue/password';
-import { supabase } from "@/database/supabase";
 
 export default {
   components: {
@@ -34,31 +29,32 @@ export default {
   },
   data() {
     return {
-      firstName: null,
-      lastName: null,
-      email: null,
+      username: null,
       password: null
     }
   },
   methods: {
-    async signUp() {
-      const { user, session, error } = await supabase.auth.signUp(
-          {
-            email: this.email,
-            password: this.password,
-          },
-          {
-            data: {
-              first_name: this.firstName,
-              last_name: this.lastName,
-            }
-          }
-      )
+    async signUp(e) {
+      e.preventDefault();
 
-      if(error) {
-        console.log(error)
+      try {
+        const res = await this.axios.post('http://localhost:3000/users/register',
+            {
+              username: this.username,
+              password: this.password
+            });
+        console.log(res);
+        if (res.status === 200) {
+          //TODO: rediriger vers le dashboard
+          await this.$router.push('/market')
+        }
+      } catch (err) {
+        console.error(err);
       }
-      console.log(session, user)
+
+      //reset des champs
+      this.username = null
+      this.password = null
     }
   }
 }
